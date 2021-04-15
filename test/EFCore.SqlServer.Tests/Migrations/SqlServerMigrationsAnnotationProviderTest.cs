@@ -27,7 +27,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Internal
             var model = SqlServerTestHelpers.Instance.Finalize(modelBuilder);
             var property = model.FindEntityType(typeof(Entity)).FindProperty("Id");
 
-            var migrationAnnotations = _annotations.For(property.GetTableColumnMappings().Single().Column).ToList();
+            var migrationAnnotations = _annotations.For(property.GetTableColumnMappings().Single().Column, true).ToList();
 
             var identity = Assert.Single(migrationAnnotations, a => a.Name == SqlServerAnnotationNames.Identity);
             Assert.Equal("2, 3", identity.Value);
@@ -42,7 +42,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Internal
             var model = SqlServerTestHelpers.Instance.Finalize(modelBuilder);
 
             Assert.Contains(
-                _annotations.For(model.FindEntityType(typeof(Entity)).GetIndexes().Single().GetMappedTableIndexes().Single()),
+                _annotations.For(model.FindEntityType(typeof(Entity)).GetIndexes().Single().GetMappedTableIndexes().Single(), true),
                 a => a.Name == SqlServerAnnotationNames.Include && ((string[])a.Value).Contains("IncludedColumn"));
         }
 
